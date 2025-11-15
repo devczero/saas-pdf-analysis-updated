@@ -1,0 +1,78 @@
+# Package Update Guide for SaaS PDF Analysis App
+
+How to check current version and the latest one of all packages:
+npx npm-check-updates
+
+Or you can check all outdated packages:
+npm outdated
+
+Update all package.json to latest versions - it can break the app:
+-> go slow on production and first do this on Development version and test/fix
+npx npm-check-updates -u
+
+Do you want to check just a specific package? Run:
+npm view <package-name> version
+Example: npm view @clerk/nextjs version
+
+Stripe version (for prod - testing locally uses a default older version)
+Login to stripe -> open workbench tab (right bottom corner) -> 
+check API version -> get latest and replace current version in /lib/stripe.ts
+
+----------------------
+# Safe Update Process
+
+Step 1: Backup your code
+Step 2: Update to latest compatible versions (respects semver in package.json)
+npm update
+
+Step 3: Update to latest versions (including major versions)
+npx npm-check-updates -u
+npm install
+
+Step 4: Test the application
+npm run dev
+
+Step 5: Test all features: auth, subscriptions, etc. 
+
+Step 6: Run linting and build
+npm run lint
+npm run build
+
+---
+
+## Incremental Update Strategy (Safer)
+
+### Phase 1: Core Framework
+npm install next@latest react@latest react-dom@latest
+npm install -D eslint-config-next@latest
+
+### Phase 2: Authentication & Database
+npm install @clerk/nextjs@latest
+npm install prisma@latest @prisma/client@latest
+npx prisma generate
+
+### Phase 3: Payment Processing
+npm install stripe@latest svix@latest
+
+### Phase 4: UI Libraries
+npm install @radix-ui/react-progress@latest @radix-ui/react-slot@latest
+npm install lucide-react@latest
+npm install tailwindcss@latest @tailwindcss/postcss@latest
+npm install tailwind-merge@latest tailwindcss-animate@latest
+
+### Phase 5: Utilities
+npm install lru-cache@latest pdfjs-dist@latest
+npm install clsx@latest class-variance-authority@latest
+
+### Phase 6: TypeScript Types
+npm install -D @types/node@latest @types/react@latest @types/react-dom@latest
+npm install -D typescript@latest
+
+---
+
+## Check for Security Vulnerabilities
+npm audit
+npm audit fix
+
+
+---

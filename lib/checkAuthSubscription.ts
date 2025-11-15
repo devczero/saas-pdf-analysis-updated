@@ -40,7 +40,7 @@ export async function checkAuthenticationAndSubscription(waitMs = 0): Promise<Au
     };
   }
 
-  const hasActiveSubscription = true; //subscription?.status === 'active';
+  const hasActiveSubscription = subscription?.status === 'active';
 
   return {
     userId,
